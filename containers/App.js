@@ -1,75 +1,96 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { pushState } from 'redux-router'
-import Explore from '../components/Explore'
-import { resetErrorMessage } from '../actions'
+import { fetchHandlersIfNeeded } from '../actions'
+import Picker from '../components/Picker'
+import Handlers from '../components/Handlers'
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.handleChange = this.handleChange.bind(this)
-    this.handleDismissClick = this.handleDismissClick.bind(this)
+    this.handleRefreshClick = this.handleRefreshClick.bind(this)
   }
 
-  handleDismissClick(e) {
-    this.props.resetErrorMessage()
+  componentDidMount() {
+    const { dispatch, selectedReddit } = this.props
+    dispatch(fetchHandlersIfNeeded())
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { dispatch, selectedReddit } = nextProps
+    dispatch(fetchHandlersIfNeeded())
+  }
+
+  handleChange(nextReddit) {
+    this.props.dispatch()
+  }
+
+  handleRefreshClick(e) {
     e.preventDefault()
-  }
 
-  handleChange(nextValue) {
-    this.props.pushState(null, `/${nextValue}`)
-  }
-
-  renderErrorMessage() {
-    const { errorMessage } = this.props
-    if (!errorMessage) {
-      return null
-    }
-
-    return (
-      <p style={{ backgroundColor: '#e99', padding: 10 }}>
-        <b>{errorMessage}</b>
-        {' '}
-        (<a href="#"
-            onClick={this.handleDismissClick}>
-          Dismiss
-        </a>)
-      </p>
-    )
+    const { dispatch, selectedReddit } = this.props
+    dispatch(fetchHandlersIfNeeded())
   }
 
   render() {
-    const { children, inputValue } = this.props
+    const { selectedReddit, handlers, isFetching, lastUpdated } = this.props
     return (
       <div>
-        <Explore value={inputValue}
-                 onChange={this.handleChange} />
-        <hr />
-        {this.renderErrorMessage()}
-        {children}
+        <p>
+          {lastUpdated &&
+            <span>
+              Last updated at {new Date(lastUpdated).toLocaleTimeString()}.
+              {' '}
+            </span>
+          }
+          {!isFetching &&
+            <a href="#"
+               onClick={this.handleRefreshClick}>
+              Refresh
+            </a>
+          }
+        </p>
+        {isFetching && handlers.length === 0 &&
+          <h2>Loading...</h2>
+        }
+        {!isFetching && handlers.length === 0 &&
+          <h2>Empty.</h2>
+        }
+        {handlers.length > 0 &&
+          <div style={{ opacity: isFetching ? 0.5 : 1 }}>
+            <Handlers handlers={handlers} />
+          </div>
+        }
       </div>
     )
   }
 }
 
 App.propTypes = {
-  // Injected by React Redux
-  errorMessage: PropTypes.string,
-  resetErrorMessage: PropTypes.func.isRequired,
-  pushState: PropTypes.func.isRequired,
-  inputValue: PropTypes.string.isRequired,
-  // Injected by React Router
-  children: PropTypes.node
+  selectedReddit: PropTypes.string.isRequired,
+  handlers: PropTypes.array.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  lastUpdated: PropTypes.number,
+  dispatch: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {
+  const { selectedReddit, allHandlers} = state
+  const {
+    isFetching,
+    lastUpdated,
+    items: handlers 
+  } = allHandlers || {
+    isFetching: true,
+    items: []
+  }
+
   return {
-    errorMessage: state.errorMessage,
-    inputValue: state.router.location.pathname.substring(1)
+    selectedReddit,
+    handlers,
+    isFetching,
+    lastUpdated
   }
 }
 
-export default connect(mapStateToProps, {
-  resetErrorMessage,
-  pushState
-})(App)
+export default connect(mapStateToProps)(App)
