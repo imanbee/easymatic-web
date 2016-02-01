@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { fetchHandlersIfNeeded } from '../actions'
-import Picker from '../components/Picker'
 import Handlers from '../components/Handlers'
 
 class App extends Component {
@@ -12,12 +11,12 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, selectedReddit } = this.props
+    const { dispatch } = this.props
     dispatch(fetchHandlersIfNeeded())
   }
 
   componentWillReceiveProps(nextProps) {
-    const { dispatch, selectedReddit } = nextProps
+    const { dispatch } = nextProps
     dispatch(fetchHandlersIfNeeded())
   }
 
@@ -28,12 +27,12 @@ class App extends Component {
   handleRefreshClick(e) {
     e.preventDefault()
 
-    const { dispatch, selectedReddit } = this.props
+    const { dispatch } = this.props
     dispatch(fetchHandlersIfNeeded())
   }
 
   render() {
-    const { selectedReddit, handlers, isFetching, lastUpdated } = this.props
+    const { handlers, isFetching, lastUpdated } = this.props
     return (
       <div>
         <p>
@@ -67,7 +66,6 @@ class App extends Component {
 }
 
 App.propTypes = {
-  selectedReddit: PropTypes.string.isRequired,
   handlers: PropTypes.array.isRequired,
   isFetching: PropTypes.bool.isRequired,
   lastUpdated: PropTypes.number,
@@ -86,7 +84,6 @@ function mapStateToProps(state) {
   }
 
   return {
-    selectedReddit,
     handlers,
     isFetching,
     lastUpdated

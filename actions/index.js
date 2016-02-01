@@ -20,9 +20,12 @@ function receivePosts(json) {
 function fetchHandlers() {
   return dispatch => {
     dispatch(requestHandlers())
-    return fetch(`http://localhost:8088/api/`)
-      .then(response => response.json())
-      .then(json => dispatch(receivePosts(json)))
+    return fetch(`http://localhost:8088/api/handlers/`)
+    .then(function(data){
+        console.log('Data is ', data)
+    })
+    .then(response => response.json())
+    .then(json => dispatch(receivePosts(json)))
   }
 }
 
@@ -34,7 +37,7 @@ function shouldFetchHandlers(state) {
   if (handlers.isFetching) {
     return false
   }
-  return handlers.didInvalidate
+  return true 
 }
 
 export function fetchHandlersIfNeeded() {

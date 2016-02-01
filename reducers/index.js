@@ -5,19 +5,16 @@ import {
 
 function handlers(state = {
   isFetching: false,
-  didInvalidate: false,
   items: []
 }, action) {
   switch (action.type) {
     case REQUEST_HANDLERS:
       return Object.assign({}, state, {
-        isFetching: true,
-        didInvalidate: false
+        isFetching: true
       })
     case RECEIVE_HANDLERS:
       return Object.assign({}, state, {
         isFetching: false,
-        didInvalidate: false,
         items: action.handlers,
         lastUpdated: action.receivedAt
       })
@@ -26,7 +23,7 @@ function handlers(state = {
   }
 }
 
-function postsByReddit(state = { }, action) {
+function handlersByReddit(state = { }, action) {
   switch (action.type) {
     case INVALIDATE_REDDIT:
     case RECEIVE_POSTS:
@@ -40,7 +37,7 @@ function postsByReddit(state = { }, action) {
 }
 
 const rootReducer = combineReducers({
-  handlers
+    handlers
 })
 
 export default rootReducer
