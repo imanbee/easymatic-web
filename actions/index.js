@@ -2,50 +2,80 @@ import fetch from 'isomorphic-fetch'
 
 export const REQUEST_HANDLERS = 'REQUEST_HANDLERS'
 export const RECEIVE_HANDLERS = 'RECEIVE_HANDLERS'
+export const SELECT_HANDLER = 'SELECT_HANDLER'
+export const REQUEST_TAGS = 'REQUEST_TAGS'
+export const RECEIVE_TAGS = 'RECEIVE_TAGS'
 
 function requestHandlers() {
-  return {
-    type: REQUEST_HANDLERS
-  }
+    return {
+        type: REQUEST_HANDLERS
+    }
 }
 
-function receivePosts(json) {
-    console.log('Receive posts ', json)
-  return {
-    type: RECEIVE_HANDLERS,
-    items: json,
-    receivedAt: Date.now()
-  }
+function receiveHandlers(json) {
+    return {
+        type: RECEIVE_HANDLERS,
+        items: json,
+        receivedAt: Date.now()
+    }
 }
 
-function fetchHandlers() {
-  return dispatch => {
-    dispatch(requestHandlers())
-    return fetch('http://localhost:8088/api/handlers/')
-    .then(response => response.json())
-    .then(json => dispatch(receivePosts(json)))
-  }
+function selectHandler(handler) {
+    return {
+        type: SELECT_HANDLER,
+        handler
+    }
 }
 
-function shouldFetchHandlers(state) {
-    console.log('State is ', state)
-    console.log('Handlers is ', state.handlers.items)
-  var handlers = state.handlers.items
-  if (!handlers || handlers.length === 0) {
-    console.log('Need to fetch')
-    return true
-  }
-  if (handlers.isFetching) {
-    return false
-  }
-  console.log('No need to fetch')
-  return false 
+function requestTags(handler) {
+    return {
+        type: REQUEST_TAGS,
+        handler
+    }
 }
 
-export function fetchHandlersIfNeeded() {
-  return (dispatch, getState) => {
-    // if (shouldFetchHandlers(getState())) {
-      return dispatch(fetchHandlers())
-    // }
-  }
+function receiveTags(handler, json) {
+    return {
+        type: RECEIVE_TAGS,
+        handler,
+        items: json,
+        receivedAt: Date.now()
+    }
+}
+
+export function fetchHandlers() {
+    return dispatch => {
+        dispatch(requestHandlers())
+            return fetch('http://localhost:8088/api/handlers/')
+            .then(response => response.json())
+            .then(json => dispatch(receiveHandlers(json)))
+    }
+}
+
+function fetchTags(handler) {
+    return dispatch => {
+        dispatch(requestTags(handler))
+        return fetch(`http://localhost:8088/api/handlers/${handler}/tags/`)
+            .then(response => response.json())
+            .then(json => dispatch(receiveTags(handler, json)))
+    }
+}
+
+function shouldFetchTags(state, handler) {
+    const tags = state.tagsByHandler[handler]
+    if (!tags) {
+        return true
+    }
+    if (tags.isFetching) {
+        return false
+    }
+    return false 
+}
+
+export function fetchTagsIfNeeded(handler) {
+    return (dispatch, getState) => {
+        if (shouldFetchTags(getState(), handler)) {
+            return dispatch(fetchTags(handler))
+        }
+    }
 }
