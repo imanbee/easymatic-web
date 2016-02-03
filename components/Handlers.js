@@ -5,7 +5,7 @@ export default class Handlers extends Component {
     return (
       <ul>
         {this.props.handlers.map((handler, i) =>
-          <li key={i}>{hanler}</li>
+          <li key={i}>{handler}</li>
         )}
       </ul>
     )

@@ -17,7 +17,7 @@ class App extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { dispatch } = nextProps
-    dispatch(fetchHandlersIfNeeded())
+    // dispatch(fetchHandlersIfNeeded())
   }
 
   handleChange(nextReddit) {
@@ -73,15 +73,12 @@ App.propTypes = {
 }
 
 function mapStateToProps(state) {
-  const { selectedReddit, allHandlers} = state
-  const {
-    isFetching,
-    lastUpdated,
-    items: handlers 
-  } = allHandlers || {
-    isFetching: true,
-    items: []
-  }
+    console.log('Map state to props', state)
+    console.log(state.handlers.items)
+    var handlers = state.handlers.items
+    console.log('All handlers ', handlers)
+    var isFetching = state.handlers.isFetching
+    var lastUpdated = state.handlers.lastUpdated || Date.now()
 
   return {
     handlers,

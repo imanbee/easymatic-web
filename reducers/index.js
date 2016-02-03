@@ -3,10 +3,9 @@ import {
   REQUEST_HANDLERS, RECEIVE_HANDLERS
 } from '../actions'
 
-function handlers(state = {
-  isFetching: false,
-  items: []
-}, action) {
+function handlers(state = {isFetching: false, items: []}, action) {
+  console.log('State is', state)
+  console.log('Action is', action)
   switch (action.type) {
     case REQUEST_HANDLERS:
       return Object.assign({}, state, {
@@ -15,21 +14,8 @@ function handlers(state = {
     case RECEIVE_HANDLERS:
       return Object.assign({}, state, {
         isFetching: false,
-        items: action.handlers,
+        items: action.items,
         lastUpdated: action.receivedAt
-      })
-    default:
-      return state
-  }
-}
-
-function handlersByReddit(state = { }, action) {
-  switch (action.type) {
-    case INVALIDATE_REDDIT:
-    case RECEIVE_POSTS:
-    case REQUEST_POSTS:
-      return Object.assign({}, state, {
-        [action.reddit]: posts(state[action.reddit], action)
       })
     default:
       return state

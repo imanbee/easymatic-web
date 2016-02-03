@@ -10,9 +10,10 @@ function requestHandlers() {
 }
 
 function receivePosts(json) {
+    console.log('Receive posts ', json)
   return {
     type: RECEIVE_HANDLERS,
-    handlers: json.data.children.map(child => child.data),
+    items: json,
     receivedAt: Date.now()
   }
 }
@@ -20,30 +21,31 @@ function receivePosts(json) {
 function fetchHandlers() {
   return dispatch => {
     dispatch(requestHandlers())
-    return fetch(`http://localhost:8088/api/handlers/`)
-    .then(function(data){
-        console.log('Data is ', data)
-    })
+    return fetch('http://localhost:8088/api/handlers/')
     .then(response => response.json())
     .then(json => dispatch(receivePosts(json)))
   }
 }
 
 function shouldFetchHandlers(state) {
-  const handlers = state.handlers
-  if (!handlers) {
+    console.log('State is ', state)
+    console.log('Handlers is ', state.handlers.items)
+  var handlers = state.handlers.items
+  if (!handlers || handlers.length === 0) {
+    console.log('Need to fetch')
     return true
   }
   if (handlers.isFetching) {
     return false
   }
-  return true 
+  console.log('No need to fetch')
+  return false 
 }
 
 export function fetchHandlersIfNeeded() {
   return (dispatch, getState) => {
-    if (shouldFetchHandlers(getState())) {
+    // if (shouldFetchHandlers(getState())) {
       return dispatch(fetchHandlers())
-    }
+    // }
   }
 }
