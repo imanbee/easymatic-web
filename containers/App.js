@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { fetchHandlers } from '../actions'
-import Handlers from '../components/Handlers'
+import HandlersList from '../components/HandlersList'
 
 class App extends Component {
     constructor(props) {
@@ -55,7 +55,7 @@ class App extends Component {
                     }
                     {handlers.length > 0 &&
                         <div style={{ opacity: isFetching ? 0.5 : 1 }}>
-                            <Handlers handlers={handlers} tags={tags}/>
+                            <HandlersList handlers={handlers} />
                             </div>
                     }
                     </div>
@@ -74,10 +74,17 @@ function mapStateToProps(state) {
     console.log('Map state to props', state)
         var tags = state.tagsByHandler
         console.log(state.handlers.items)
-        var handlers = state.handlers.items
+        var handlersOriginal = state.handlers.items
         console.log('All handlers ', handlers)
         var isFetching = state.handlers.isFetching
         var lastUpdated = state.handlers.lastUpdated || Date.now()
+        var handlers = [];
+        for (var i = 0; i < handlersOriginal.length; i++) {
+            var handler = {};
+            handler['name'] = handlersOriginal[i];
+            handler['items'] = tags[handlersOriginal[i]]
+            handlers.push(handler)
+        }
 
         return {
             handlers,
