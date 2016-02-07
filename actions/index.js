@@ -35,10 +35,22 @@ function requestTags(handler) {
 }
 
 function receiveTags(handler, json) {
+    console.log('Receive tags ', json)
+    var tags = [];
+    for (var i in json) {
+        console.log('Tag ', i, json[i]);
+        var tag = {
+            name: i,
+            value: json[i]
+        }
+        tags.push(tag)
+    }
+    
+    console.log('Transform to tags array', tags)
     return {
         type: RECEIVE_TAGS,
         handler,
-        items: json,
+        items: tags,
         receivedAt: Date.now()
     }
 }
@@ -69,7 +81,7 @@ function shouldFetchTags(state, handler) {
     if (tags.isFetching) {
         return false
     }
-    return false 
+    return true 
 }
 
 export function fetchTagsIfNeeded(handler) {

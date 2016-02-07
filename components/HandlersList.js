@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 import { fetchTagsIfNeeded } from '../actions'
 import Handler from '../components/Handler'
-import Tags from '../components/Tags'
+import TagsList from '../components/TagsList'
 
 export default class HandlersList extends Component {
     
@@ -24,18 +24,18 @@ export default class HandlersList extends Component {
         this.props.dispatch(fetchTagsIfNeeded(handler.name))
     }
 
-    filterTags(handler) {
-        console.log('Filter tags', handler, this.props.tags)
-        return this.props.tags
-    }
-
     render() {
+        var style = {
+            listStyleType: 'none'
+        }
         return (
-        <ul>
+        <ul style={style}>
             {this.props.handlers.map((handler, i) =>
             <li key={i} onClick={this.handleClick.bind(this, handler)}>
                 <Handler handler={handler.name} />
-                {handler.tags}
+                {handler && handler.tags && handler.tags.items && handler.tags.items.length > 0 &&
+                <TagsList tags={handler.tags.items} /> 
+                }
             </li>
             )}
         </ul>

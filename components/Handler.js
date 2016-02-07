@@ -17,6 +17,7 @@ export default class Handler extends Component {
     componentWillReceiveProps(nextProps) {
         const { dispatch } = nextProps
         console.log('Handler componentWillReceiveProps with props', nextProps);
+        dispatch(fetchTagsIfNeeded(this.props.handler))
     }
 
     render() {

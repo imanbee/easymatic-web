@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { fetchHandlers } from '../actions'
 import HandlersList from '../components/HandlersList'
+import PageHeader from 'react-bootstrap/lib/PageHeader'
 
 class App extends Component {
     constructor(props) {
@@ -33,6 +34,7 @@ class App extends Component {
         const { handlers, tags, isFetching, lastUpdated } = this.props
             return (
                     <div>
+                    <PageHeader>Smart House<small>  handlers and tags</small></PageHeader>
                     <p>
                     {lastUpdated &&
                         <span>
@@ -82,7 +84,7 @@ function mapStateToProps(state) {
         for (var i = 0; i < handlersOriginal.length; i++) {
             var handler = {};
             handler['name'] = handlersOriginal[i];
-            handler['items'] = tags[handlersOriginal[i]]
+            handler['tags'] = tags[handlersOriginal[i]] || []
             handlers.push(handler)
         }
 
