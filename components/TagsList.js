@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
+import Tag from '../components/Tag'
 
 export default class TagsList extends Component {
 
@@ -19,10 +20,15 @@ export default class TagsList extends Component {
 
     render() {
         var tags = this.props.tags
+        var listStyle = {
+            listStyleType: 'none',
+            paddingLeft: '0px',
+            marginTop: '10px'
+        }
         return (
-        <ul>
+        <ul style={listStyle}>
             {tags.map((tag, i) =>
-            <li key={i}>{tag.name} : {tag.value}</li>
+            <Tag key={i} tag={tag} />
             )}
         </ul>
         )

@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { fetchHandlers } from '../actions'
 import HandlersList from '../components/HandlersList'
-import PageHeader from 'react-bootstrap/lib/PageHeader'
 
 class App extends Component {
     constructor(props) {
@@ -32,23 +31,12 @@ class App extends Component {
 
     render() {
         const { handlers, tags, isFetching, lastUpdated } = this.props
+        var titleStyle = {
+            color: '#ffffff'
+        }
             return (
                     <div>
-                    <PageHeader>Smart House<small>  handlers and tags</small></PageHeader>
-                    <p>
-                    {lastUpdated &&
-                        <span>
-                            Last updated at {new Date(lastUpdated).toLocaleTimeString()}.
-                            {' '}
-                        </span>
-                    }
-                    {!isFetching &&
-                        <a href="#"
-                            onClick={this.handleRefreshClick}>
-                            Refresh
-                            </a>
-                    }
-                    </p>
+                    <h1 style={titleStyle}>Smart House<small>  handlers and tags</small></h1>
                     {isFetching && handlers.length === 0 &&
                         <h2>Loading...</h2>
                     }

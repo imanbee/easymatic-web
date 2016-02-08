@@ -21,17 +21,26 @@ export default class HandlersList extends Component {
     }
 
     handleClick(handler, element) {
-        this.props.dispatch(fetchTagsIfNeeded(handler.name))
+        // this.props.dispatch(fetchTagsIfNeeded(handler.name))
     }
 
     render() {
-        var style = {
-            listStyleType: 'none'
+        var borderColor = '#00695C'
+        var listStyle = {
+            listStyleType: 'none',
+            paddingLeft: '0px',
+            width: '50%'
+        }
+        var handlerStyle = {
+            padding: '5px',
+            marginBottom: '10px',
+            backgroundColor: '#43A047',
+            color: '#FFFFFF'
         }
         return (
-        <ul style={style}>
+        <ul style={listStyle}>
             {this.props.handlers.map((handler, i) =>
-            <li key={i} onClick={this.handleClick.bind(this, handler)}>
+            <li style={handlerStyle} key={i} onClick={this.handleClick.bind(this, handler)}>
                 <Handler handler={handler.name} />
                 {handler && handler.tags && handler.tags.items && handler.tags.items.length > 0 &&
                 <TagsList tags={handler.tags.items} /> 

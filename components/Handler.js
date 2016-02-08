@@ -21,7 +21,7 @@ export default class Handler extends Component {
     }
 
     render() {
-        return ( <div>{this.props.handler}</div> )
+        return ( <div><b>{this.props.handler}</b></div> )
     }
 }
 
