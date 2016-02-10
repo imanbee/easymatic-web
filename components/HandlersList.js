@@ -21,7 +21,12 @@ export default class HandlersList extends Component {
     }
 
     handleClick(handler, element) {
-        // this.props.dispatch(fetchTagsIfNeeded(handler.name))
+        this.props.dispatch(fetchTagsIfNeeded(handler.name))
+    }
+
+    updateSpinnerClass(tags) {
+        var spinnerClass = 'fa fa-small fa-refresh'+(tags.isFetching ? ' fa-spin' : '')
+        return spinnerClass
     }
 
     render() {
@@ -32,18 +37,25 @@ export default class HandlersList extends Component {
             width: '50%'
         }
         var handlerStyle = {
-            padding: '5px',
-            marginBottom: '10px',
             backgroundColor: '#43A047',
             color: '#FFFFFF'
+        }
+        var spinnerStyle={
+            marginLeft: '10px',
+            fontSize: '12px',
+            cursor: 'pointer'
         }
         return (
         <ul style={listStyle}>
             {this.props.handlers.map((handler, i) =>
-            <li style={handlerStyle} key={i} onClick={this.handleClick.bind(this, handler)}>
+
+            <li style={handlerStyle} key={i}>
                 <Handler handler={handler.name} />
                 {handler && handler.tags && handler.tags.items && handler.tags.items.length > 0 &&
-                <TagsList tags={handler.tags.items} /> 
+                <i style={spinnerStyle} className={this.updateSpinnerClass(handler.tags)} onClick={this.handleClick.bind(this, handler)}/>
+                }
+                {handler && handler.tags && handler.tags.items && handler.tags.items.length > 0 &&
+                <TagsList tags={handler.tags.items} handler={handler} /> 
                 }
             </li>
             )}

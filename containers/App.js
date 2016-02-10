@@ -12,7 +12,7 @@ class App extends Component {
 
     componentDidMount() {
         const { dispatch } = this.props
-            dispatch(fetchHandlers())
+        dispatch(fetchHandlers())
     }
 
     componentWillReceiveProps(nextProps) {

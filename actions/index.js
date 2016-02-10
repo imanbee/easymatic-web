@@ -5,6 +5,9 @@ export const RECEIVE_HANDLERS = 'RECEIVE_HANDLERS'
 export const SELECT_HANDLER = 'SELECT_HANDLER'
 export const REQUEST_TAGS = 'REQUEST_TAGS'
 export const RECEIVE_TAGS = 'RECEIVE_TAGS'
+export const SEND_TAG = 'SEND_TAG'
+export const SEND_TAG_SUCCESS = 'SEND_TAG_SUCCESS'
+export const SEND_TAG_FAILURE = 'SEND_TAG_FAILURE'
 
 function requestHandlers() {
     return {
@@ -55,6 +58,34 @@ function receiveTags(handler, json) {
     }
 }
 
+function sendTag(handler, tag, value) {
+    return {
+        type: SEND_TAG,
+        handler,
+        tag,
+        value
+    } 
+}
+
+function sendTagSuccess(handler, tag, value) {
+    return {
+        type: SEND_TAG_SUCCESS,
+        handler,
+        tag,
+        value
+    }
+}
+
+function sendTagFailure(handler, tag, value, error) {
+    return {
+        type: SEND_TAG_FAILURE,
+        handler,
+        tag,
+        value,
+        error
+    }
+}
+
 export function fetchHandlers() {
     return dispatch => {
         dispatch(requestHandlers())
@@ -89,5 +120,32 @@ export function fetchTagsIfNeeded(handler) {
         if (shouldFetchTags(getState(), handler)) {
             return dispatch(fetchTags(handler))
         }
+    }
+}
+
+function checkStatus(response) {
+    if (response.status >= 200 && response.status < 300) {
+        return response
+    } else {
+        var error = new Error(response.statusText)
+        error.response = response
+        throw error
+    }
+}
+
+export function updateTag(handler, tag, value) {
+    return dispatch => {
+        dispatch(sendTag(handler, tag, value))
+        return fetch(`http://localhost:8088/api/handlers/${handler}/tags/${tag}/?value=${value}`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }).then(checkStatus)
+                .then(response => response.json())
+                    .then(json => dispatch(sendTagSuccess(handler, tag, value)))
+                    .catch(function(error) {
+                        dispatch(sendTagFailure(handler, tag, value, error))
+                    })
     }
 }

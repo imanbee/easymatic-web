@@ -20,6 +20,7 @@ export default class TagsList extends Component {
 
     render() {
         var tags = this.props.tags
+        var handler = this.props.handler
         var listStyle = {
             listStyleType: 'none',
             paddingLeft: '0px',
@@ -28,7 +29,7 @@ export default class TagsList extends Component {
         return (
         <ul style={listStyle}>
             {tags.map((tag, i) =>
-            <Tag key={i} tag={tag} />
+            <Tag key={i} tag={tag} handler={handler}/>
             )}
         </ul>
         )

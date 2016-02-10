@@ -21,7 +21,12 @@ export default class Handler extends Component {
     }
 
     render() {
-        return ( <div><b>{this.props.handler}</b></div> )
+        var handlerStyle = {
+            display: 'inline-block',
+            padding: '5px',
+            marginBottom: '5px'
+        }
+        return ( <div style={handlerStyle}><b>{this.props.handler}</b></div> )
     }
 }
 
