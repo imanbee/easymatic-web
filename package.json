@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "Web interface for python smart house system",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dist": "webpack -p"
   },
   "repository": {
     "type": "git",
