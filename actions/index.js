@@ -136,11 +136,15 @@ function checkStatus(response) {
 export function updateTag(handler, tag, value) {
     return dispatch => {
         dispatch(sendTag(handler, tag, value))
-        return fetch(`http://localhost:8088/api/handlers/${handler}/tags/${tag}/?value=${value}`, {
+        return fetch(`http://localhost:8088/api/handlers/${handler}/tags/${tag}/`, {
                     method: 'POST',
                     headers: {
-                        'Accept': 'application/json'
-                    }
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        value: value
+                    })
                 }).then(checkStatus)
                 .then(response => response.json())
                     .then(json => dispatch(sendTagSuccess(handler, tag, value)))
