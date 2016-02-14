@@ -3,14 +3,13 @@ var webpack = require('webpack')
 
 module.exports = {
     devtool: 'cheap-module-eval-source-map',
-    entry: [
-        'webpack-hot-middleware/client',
-        './index'
-    ],
+    entry: {
+        app: './index',
+    },
     output: {
         path: path.join(__dirname, 'dist'),
         filename: 'bundle.js',
-        publicPath: '/static/'
+        publicPath: '/dist/'
     },
     plugins: [
         new webpack.optimize.OccurenceOrderPlugin(),
@@ -27,8 +26,8 @@ module.exports = {
             test: /\.css$/,                                                                                                                                         
             loader: 'style!css'                                                                                                                             
         },
-        { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
-        { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" }]
+            { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
+            { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" }]
     }
 }
 

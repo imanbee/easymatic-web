@@ -9,6 +9,8 @@ export const SEND_TAG = 'SEND_TAG'
 export const SEND_TAG_SUCCESS = 'SEND_TAG_SUCCESS'
 export const SEND_TAG_FAILURE = 'SEND_TAG_FAILURE'
 
+export const SERVICE_BASE_URL = ''
+
 function requestHandlers() {
     return {
         type: REQUEST_HANDLERS
@@ -89,7 +91,7 @@ function sendTagFailure(handler, tag, value, error) {
 export function fetchHandlers() {
     return dispatch => {
         dispatch(requestHandlers())
-            return fetch('http://localhost:8088/api/handlers/')
+            return fetch(SERVICE_BASE_URL + 'api/handlers/')
             .then(response => response.json())
             .then(json => dispatch(receiveHandlers(json)))
     }
@@ -98,7 +100,7 @@ export function fetchHandlers() {
 function fetchTags(handler) {
     return dispatch => {
         dispatch(requestTags(handler))
-        return fetch(`http://localhost:8088/api/handlers/${handler}/tags/`)
+        return fetch(SERVICE_BASE_URL + `api/handlers/${handler}/tags/`)
             .then(response => response.json())
             .then(json => dispatch(receiveTags(handler, json)))
     }
@@ -136,7 +138,7 @@ function checkStatus(response) {
 export function updateTag(handler, tag, value) {
     return dispatch => {
         dispatch(sendTag(handler, tag, value))
-        return fetch(`http://localhost:8088/api/handlers/${handler}/tags/${tag}/`, {
+        return fetch(SERVICE_BASE_URL + `api/handlers/${handler}/tags/${tag}/`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
