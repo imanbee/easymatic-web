@@ -9,7 +9,23 @@ export const SEND_TAG = 'SEND_TAG'
 export const SEND_TAG_SUCCESS = 'SEND_TAG_SUCCESS'
 export const SEND_TAG_FAILURE = 'SEND_TAG_FAILURE'
 
-export const SERVICE_BASE_URL = ''
+export const SERVICE_BASE_URL = 'http://localhost:8088/'
+
+export const REQUEST_EVENTS = 'REQUEST_EVENTS'
+export const RECEIVE_EVENT = 'RECEIVE_EVENT'
+
+function requestEvents() {
+    return {
+        type: REQUEST_EVENTS
+    }
+}
+
+function receiveEvent(json) {
+    return {
+        type: RECEIVE_EVENT,
+        event: json
+    }
+}
 
 function requestHandlers() {
     return {
@@ -85,6 +101,15 @@ function sendTagFailure(handler, tag, value, error) {
         tag,
         value,
         error
+    }
+}
+
+export function startFetchEvents() {
+    return dispatch => {
+        dispatch(requestEvents())
+        return fetch(SERVICE_BASE_URL + 'api/events?wait=true')
+        .then(response => response.json())
+        .then(json => dispath(receiveEvent(json)))
     }
 }
 

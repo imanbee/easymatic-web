@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import {
-  REQUEST_HANDLERS, RECEIVE_HANDLERS, SELECT_HANDLER, REQUEST_TAGS, RECEIVE_TAGS
+  REQUEST_HANDLERS, RECEIVE_HANDLERS, SELECT_HANDLER, REQUEST_TAGS, RECEIVE_TAGS, REQUEST_EVENTS, RECEIVE_EVENT
 } from '../actions'
 
 function selectedHandler(state = '', action) {
@@ -63,10 +63,27 @@ function handlers(state = {isFetching: false, items: []}, action) {
         }
 }
 
+function events(state = {isFetching: false, event: []}, action) {
+        switch (action.type) {
+            case REQUEST_EVENTS:
+                return Object.assign({}, state, {
+                    isFetching: true
+                })
+            case RECEIVE_EVENT:
+                return Object.assign({}, state, {
+                    isFetching: false,
+                    event: action.event
+                })
+            default:
+                return state
+        }
+}
+
 const rootReducer = combineReducers({
     tagsByHandler,
     selectedHandler,
-    handlers
+    handlers,
+    events
 })
 
 export default rootReducer

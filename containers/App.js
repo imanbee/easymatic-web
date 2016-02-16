@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { fetchHandlers } from '../actions'
+import { fetchHandlers, startFetchEvents } from '../actions'
 import HandlersList from '../components/HandlersList'
 
 class App extends Component {
@@ -13,6 +13,7 @@ class App extends Component {
     componentDidMount() {
         const { dispatch } = this.props
         dispatch(fetchHandlers())
+        dispatch(startFetchEvents())
     }
 
     componentWillReceiveProps(nextProps) {
