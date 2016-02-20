@@ -21,7 +21,10 @@ export default class Tag extends Component {
 
     onSwitchChange(tag, handler, state) {
         console.log('Switch changed with state', tag, handler, state)
-        this.props.dispatch(updateTag(handler.name, tag.name, (state ? '1' : '0')))
+        var st = (state ? '1' : '0')
+        if (tag.value != st) {
+            this.props.dispatch(updateTag(handler.name, tag.name, st))
+        }
     }
 
     render() {
