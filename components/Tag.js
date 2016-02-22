@@ -11,20 +11,17 @@ export default class Tag extends Component {
 
     componentDidMount() {
         const { dispatch } = this.props
-        console.log('Tag componentDidMount with props', this.props);
     }
 
     componentWillReceiveProps(nextProps) {
         const { dispatch } = nextProps
-        console.log('Tag componentWillReceiveProps with props', nextProps);
+        console.log('EventsMonitor tag componentWillReceiveProps', nextProps)
     }
 
     onSwitchChange(tag, handler, state) {
         console.log('Switch changed with state', tag, handler, state)
         var st = (state ? '1' : '0')
-        if (tag.value != st) {
-            this.props.dispatch(updateTag(handler.name, tag.name, st))
-        }
+        this.props.dispatch(updateTag(handler.name, tag.name, st))
     }
 
     render() {

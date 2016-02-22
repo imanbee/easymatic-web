@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { fetchHandlers, startFetchEvents } from '../actions'
+import { fetchHandlers } from '../actions'
 import HandlersList from '../components/HandlersList'
+import DevTools from '../containers/DevTools'
+import EventsMonitor from '../containers/EventsMonitor'
 
 class App extends Component {
     constructor(props) {
@@ -13,7 +15,6 @@ class App extends Component {
     componentDidMount() {
         const { dispatch } = this.props
         dispatch(fetchHandlers())
-        dispatch(startFetchEvents())
     }
 
     componentWillReceiveProps(nextProps) {
@@ -26,18 +27,18 @@ class App extends Component {
 
     handleRefreshClick(e) {
         e.preventDefault()
-            const { dispatch } = this.props
-            dispatch(fetchHandlers())
+        const { dispatch } = this.props
+        dispatch(fetchHandlers())
     }
 
     render() {
-        const { handlers, tags, isFetching, lastUpdated } = this.props
+        const { handlers, tags, isFetching, lastUpdated, events } = this.props
         var titleStyle = {
             color: '#ffffff'
         }
-            return (
-                    <div>
-                    <h1 style={titleStyle}>Smart House<small>  handlers and tags</small></h1>
+        return (
+                <div>
+                <h1 style={titleStyle}>Smart House<small>  handlers and tags</small></h1>
                     {isFetching && handlers.length === 0 &&
                         <h2>Loading...</h2>
                     }
@@ -49,6 +50,8 @@ class App extends Component {
                             <HandlersList handlers={handlers} />
                             </div>
                     }
+                    <EventsMonitor events={events}/>
+                    <DevTools/>
                     </div>
                         )
     }
@@ -76,12 +79,14 @@ function mapStateToProps(state) {
             handler['tags'] = tags[handlersOriginal[i]] || []
             handlers.push(handler)
         }
+        var events = state.events
 
         return {
             handlers,
             tags,
             isFetching,
-            lastUpdated
+            lastUpdated,
+            events
         }
 }
 

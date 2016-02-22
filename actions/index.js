@@ -21,9 +21,10 @@ function requestEvents() {
 }
 
 function receiveEvent(json) {
+    console.log('Receive event')
     return {
         type: RECEIVE_EVENT,
-        event: json
+        payload: json
     }
 }
 
@@ -109,7 +110,7 @@ export function startFetchEvents() {
         dispatch(requestEvents())
         return fetch(SERVICE_BASE_URL + 'api/events?wait=true')
         .then(response => response.json())
-        .then(json => dispath(receiveEvent(json)))
+        .then(json => dispatch(receiveEvent(json)))
     }
 }
 
@@ -163,7 +164,7 @@ function checkStatus(response) {
 export function updateTag(handler, tag, value) {
     return dispatch => {
         dispatch(sendTag(handler, tag, value))
-        return fetch(SERVICE_BASE_URL + `api/handlers/${handler}/tags/${tag}/`, {
+        /*return fetch(SERVICE_BASE_URL + `api/handlers/${handler}/tags/${tag}/`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -172,6 +173,14 @@ export function updateTag(handler, tag, value) {
                     body: JSON.stringify({
                         value: value
                     })
+                }).then(checkStatus)
+                .then(response => response.json())
+                    .then(json => dispatch(sendTagSuccess(handler, tag, value)))
+                    .catch(function(error) {
+                        dispatch(sendTagFailure(handler, tag, value, error))
+                    })*/
+        return fetch(SERVICE_BASE_URL + `api/handlers/${handler}/tags/${tag}/?value=${value}`, {
+                    method: 'POST'
                 }).then(checkStatus)
                 .then(response => response.json())
                     .then(json => dispatch(sendTagSuccess(handler, tag, value)))

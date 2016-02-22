@@ -10,12 +10,10 @@ export default class TagsList extends Component {
 
     componentDidMount() {
         const { dispatch } = this.props
-            console.log('TagsList componentDidMount with props', this.props);
     }
 
     componentWillReceiveProps(nextProps) {
         const { dispatch } = nextProps
-            console.log('TagsList componentWillReceiveProps with props', nextProps);
     }
 
     render() {

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import {
-  REQUEST_HANDLERS, RECEIVE_HANDLERS, SELECT_HANDLER, REQUEST_TAGS, RECEIVE_TAGS, REQUEST_EVENTS, RECEIVE_EVENT
+  REQUEST_HANDLERS, RECEIVE_HANDLERS, SELECT_HANDLER, REQUEST_TAGS, RECEIVE_TAGS, REQUEST_EVENTS, RECEIVE_EVENT, SEND_TAG_SUCCESS
 } from '../actions'
 
 function selectedHandler(state = '', action) {
@@ -27,6 +27,20 @@ function tags(state = {
         items: action.items,
         lastUpdated: action.receivedAt
       })
+    case SEND_TAG_SUCCESS:
+        var tags = state.items
+        for (var i = 0; i < tags.length; i++) {
+            var tag = tags[i]
+            if (tag.name == action.tag) {
+                tag.value = action.value
+            }
+        }
+      return Object.assign({}, state, {
+        isFetching: false,
+        items: tags,
+        lastUpdated: action.receivedAt
+      })
+        
     default:
       return state
     }
@@ -36,6 +50,10 @@ function tagsByHandler(state = {}, action) {
     switch (action.type) {
         case REQUEST_TAGS:
         case RECEIVE_TAGS:
+            return Object.assign({}, state, {
+                [action.handler]: tags(state[action.handler], action)
+            })
+        case SEND_TAG_SUCCESS:
             return Object.assign({}, state, {
                 [action.handler]: tags(state[action.handler], action)
             })
@@ -63,7 +81,7 @@ function handlers(state = {isFetching: false, items: []}, action) {
         }
 }
 
-function events(state = {isFetching: false, event: []}, action) {
+function events(state = {isFetching: false, data: []}, action) {
         switch (action.type) {
             case REQUEST_EVENTS:
                 return Object.assign({}, state, {
@@ -72,7 +90,7 @@ function events(state = {isFetching: false, event: []}, action) {
             case RECEIVE_EVENT:
                 return Object.assign({}, state, {
                     isFetching: false,
-                    event: action.event
+                    data: action.payload
                 })
             default:
                 return state

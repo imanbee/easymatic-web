@@ -12,16 +12,10 @@ export default class HandlersList extends Component {
 
     componentDidMount() {
         const { dispatch } = this.props
-        console.log('HandlersList componentDidMount with props', this.props);
     }
 
     componentWillReceiveProps(nextProps) {
         const { dispatch } = nextProps
-        console.log('HandlersList componentWillReceiveProps with props', nextProps);
-    }
-
-    handleClick(handler, element) {
-        this.props.dispatch(fetchTagsIfNeeded(handler.name))
     }
 
     updateSpinnerClass(tags) {
@@ -51,9 +45,6 @@ export default class HandlersList extends Component {
 
             <li style={handlerStyle} key={i}>
                 <Handler handler={handler.name} />
-                {handler && handler.tags && handler.tags.items && handler.tags.items.length > 0 &&
-                <i style={spinnerStyle} className={this.updateSpinnerClass(handler.tags)} onClick={this.handleClick.bind(this, handler)}/>
-                }
                 {handler && handler.tags && handler.tags.items && handler.tags.items.length > 0 &&
                 <TagsList tags={handler.tags.items} handler={handler} /> 
                 }
