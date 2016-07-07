@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { startFetchEvents } from '../actions'
+import Event from '../components/Event'
 
 export default class EventsMonitor extends Component {
     constructor(props) {
@@ -15,13 +16,11 @@ export default class EventsMonitor extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('EventsMonitor will receive props', nextProps)
         const { events, dispatch } = nextProps
         if (events.isFetching == false) {
-            console.log('EventsMonitor startFetchEvents')
             dispatch(startFetchEvents())
         }
-        
+
     }
 
     handleChange(nextHandler) {
@@ -39,15 +38,35 @@ export default class EventsMonitor extends Component {
         }
         var events = [];
         var data = this.props.events.data
-            console.log('Data is ', data)
+        var processedData = [];
         for (var i in data) {
-            console.log(i)
+          for (var j in data[i]) {
+            var d = {
+              id: j,
+              event: data[i][j]
+            }
+            processedData.push(d);
+          }
         }
-            return (
-                    <div>
-
-                    </div>
-                        )
+        var monitorStyle = {
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: '300px',
+          backgroundColor: '#97c787',
+          overflow: 'scroll',
+          opacity: '0.5'
+        }
+        console.log('Processed data is ', processedData)
+        processedData.reverse()
+        return (
+                <div className="events-monitor" style={monitorStyle}>
+                  {processedData.map((event, i) =>
+                   <Event key={event.id} event={event}/>
+                  )}
+                </div>
+                    )
     }
 }
 

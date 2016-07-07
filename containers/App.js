@@ -51,7 +51,6 @@ class App extends Component {
                             </div>
                     }
                     <EventsMonitor events={events}/>
-                    <DevTools/>
                     </div>
                         )
     }
@@ -65,29 +64,29 @@ App.propTypes = {
 }
 
 function mapStateToProps(state) {
-    console.log('Map state to props', state)
-        var tags = state.tagsByHandler
-        console.log(state.handlers.items)
-        var handlersOriginal = state.handlers.items
-        console.log('All handlers ', handlers)
-        var isFetching = state.handlers.isFetching
-        var lastUpdated = state.handlers.lastUpdated || Date.now()
-        var handlers = [];
-        for (var i = 0; i < handlersOriginal.length; i++) {
-            var handler = {};
-            handler['name'] = handlersOriginal[i];
-            handler['tags'] = tags[handlersOriginal[i]] || []
-            handlers.push(handler)
-        }
-        var events = state.events
-
-        return {
-            handlers,
-            tags,
-            isFetching,
-            lastUpdated,
-            events
-        }
+  console.log('Map state to props', state)
+  var tags = state.tagsByHandler
+  console.log(state.handlers.items)
+  var handlersOriginal = state.handlers.items
+  console.log('All handlers ', handlers)
+  var isFetching = state.handlers.isFetching
+  var lastUpdated = state.handlers.lastUpdated || Date.now()
+  var handlers = [];
+  for (var i = 0; i < handlersOriginal.length; i++) {
+      var handler = {};
+      handler['name'] = handlersOriginal[i];
+      handler['tags'] = tags[handlersOriginal[i]] || []
+      handlers.push(handler)
+  }
+  var events = state.events
+  console.log('events are', events)
+  return {
+      handlers,
+      tags,
+      isFetching,
+      lastUpdated,
+      events
+  }
 }
 
 export default connect(mapStateToProps)(App)

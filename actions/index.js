@@ -9,7 +9,7 @@ export const SEND_TAG = 'SEND_TAG'
 export const SEND_TAG_SUCCESS = 'SEND_TAG_SUCCESS'
 export const SEND_TAG_FAILURE = 'SEND_TAG_FAILURE'
 
-export const SERVICE_BASE_URL = 'http://localhost:8088/'
+export const SERVICE_BASE_URL = 'http://localhost:8080/'
 
 export const REQUEST_EVENTS = 'REQUEST_EVENTS'
 export const RECEIVE_EVENT = 'RECEIVE_EVENT'
@@ -21,7 +21,6 @@ function requestEvents() {
 }
 
 function receiveEvent(json) {
-    console.log('Receive event')
     return {
         type: RECEIVE_EVENT,
         payload: json
@@ -67,7 +66,7 @@ function receiveTags(handler, json) {
         }
         tags.push(tag)
     }
-    
+
     console.log('Transform to tags array', tags)
     return {
         type: RECEIVE_TAGS,
@@ -83,7 +82,7 @@ function sendTag(handler, tag, value) {
         handler,
         tag,
         value
-    } 
+    }
 }
 
 function sendTagSuccess(handler, tag, value) {
@@ -140,7 +139,7 @@ function shouldFetchTags(state, handler) {
     if (tags.isFetching) {
         return false
     }
-    return true 
+    return true
 }
 
 export function fetchTagsIfNeeded(handler) {

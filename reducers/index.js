@@ -40,7 +40,7 @@ function tags(state = {
         items: tags,
         lastUpdated: action.receivedAt
       })
-        
+
     default:
       return state
     }
@@ -90,7 +90,7 @@ function events(state = {isFetching: false, data: []}, action) {
             case RECEIVE_EVENT:
                 return Object.assign({}, state, {
                     isFetching: false,
-                    data: action.payload
+                    data: [...state.data, action.payload]
                 })
             default:
                 return state

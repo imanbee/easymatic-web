@@ -15,7 +15,6 @@ export default class Tag extends Component {
 
     componentWillReceiveProps(nextProps) {
         const { dispatch } = nextProps
-        console.log('EventsMonitor tag componentWillReceiveProps', nextProps)
     }
 
     onSwitchChange(tag, handler, state) {
@@ -31,8 +30,8 @@ export default class Tag extends Component {
         <li style={{padding: '8px', listStyleType: 'none'}}>
             <span style={{marginRight: '10px'}}>{tag.name}</span>
 
-            {(tag.value == '0' || tag.value == '1') && 
-            <Switch size="mini" onChange={this.onSwitchChange.bind(this, tag, handler)} state={tag.value == '1'} handleWidth="auto"/> 
+            {(tag.value == '0' || tag.value == '1') &&
+            <Switch size="mini" onChange={this.onSwitchChange.bind(this, tag, handler)} state={tag.value == '1'} handleWidth="auto"/>
             }
 
             {tag.value != '0' && tag.value != '1' &&
