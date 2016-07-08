@@ -28,18 +28,38 @@ function tags(state = {
         lastUpdated: action.receivedAt
       })
     case SEND_TAG_SUCCESS:
-        var tags = state.items
-        for (var i = 0; i < tags.length; i++) {
-            var tag = tags[i]
-            if (tag.name == action.tag) {
-                tag.value = action.value
-            }
-        }
+      var tags = state.items
+      for (var i = 0; i < tags.length; i++) {
+          var tag = tags[i]
+          if (tag.name == action.tag) {
+              tag.value = action.value
+          }
+      }
       return Object.assign({}, state, {
         isFetching: false,
         items: tags,
         lastUpdated: action.receivedAt
       })
+    case RECEIVE_EVENT:
+      for (var i in action.payload) {
+        var eventId = i;
+        var event = action.payload[i]
+        var tagName = action.payload[i].tag
+        var tagValue = action.payload[i].value
+        console.log('test:', tagName, tagValue)
+        var tags = state.items
+        for (var i = 0; i < tags.length; i++) {
+            var tag = tags[i]
+            if (tag.name == tagName) {
+                tag.value = tagValue;
+            }
+        }
+        return Object.assign({}, state, {
+          isFetching: false,
+          items: tags,
+          lastUpdated: action.receivedAt
+        })
+      }
 
     default:
       return state
@@ -57,6 +77,18 @@ function tagsByHandler(state = {}, action) {
             return Object.assign({}, state, {
                 [action.handler]: tags(state[action.handler], action)
             })
+        case RECEIVE_EVENT:
+          var handler
+          for (var i in action.payload) {
+            handler = action.payload[i].handler
+          }
+          if (handler) {
+            return Object.assign({}, state, {
+                [handler]: tags(state[handler], action)
+            })
+          } else {
+            return state
+          }
         default:
             return state
     }

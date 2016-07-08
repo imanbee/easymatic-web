@@ -26,16 +26,10 @@ export default class Event extends Component {
             borderBottom: '1px solid rgba(0, 0, 0, 0.8)'
         }
         var event = this.props.event
-        var processedEvent = {}
-        for (var i in event.event) {
-          processedEvent = {
-            source: i,
-            value: event.event[i]
-          }
-        }
+        console.log('EVENT', event)
         return (
           <div style={eventStyle}>
-            <b>{processedEvent.source}</b>: {processedEvent.value}
+            <b>{event.event.handler} {event.event.tag}</b>: {event.event.value}
           </div>
         )
     }

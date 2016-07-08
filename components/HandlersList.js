@@ -5,7 +5,7 @@ import Handler from '../components/Handler'
 import TagsList from '../components/TagsList'
 
 export default class HandlersList extends Component {
-    
+
     constructor(props) {
         super(props)
     }
@@ -46,7 +46,7 @@ export default class HandlersList extends Component {
             <li style={handlerStyle} key={i}>
                 <Handler handler={handler.name} />
                 {handler && handler.tags && handler.tags.items && handler.tags.items.length > 0 &&
-                <TagsList tags={handler.tags.items} handler={handler} /> 
+                <TagsList tags={handler.tags.items} handler={handler} />
                 }
             </li>
             )}

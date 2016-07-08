@@ -24,6 +24,7 @@ export default class TagsList extends Component {
             paddingLeft: '0px',
             marginTop: '10px'
         }
+        console.log('Tags is ', this.props.handler, this.props.tags)
         return (
         <ul style={listStyle}>
             {tags.map((tag, i) =>

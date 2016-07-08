@@ -36,8 +36,17 @@ class App extends Component {
         var titleStyle = {
             color: '#ffffff'
         }
+        var style = {
+          position: 'relative',
+          height: '100vh'
+        }
+        var handlersListStyle = {
+          opacity: isFetching ? 0.5 : 1,
+          height: '50vh',
+          overflow: 'scroll'
+        }
         return (
-                <div>
+                <div style={style}>
                 <h1 style={titleStyle}>Smart House<small>  handlers and tags</small></h1>
                     {isFetching && handlers.length === 0 &&
                         <h2>Loading...</h2>
@@ -46,7 +55,7 @@ class App extends Component {
                         <h2>Empty.</h2>
                     }
                     {handlers.length > 0 &&
-                        <div style={{ opacity: isFetching ? 0.5 : 1 }}>
+                        <div style={handlersListStyle}>
                             <HandlersList handlers={handlers} />
                             </div>
                     }
