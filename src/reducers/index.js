@@ -6,9 +6,9 @@ import {
 function selectedHandler(state = '', action) {
   switch (action.type) {
     case SELECT_HANDLER:
-    return action.handler
+      return action.handler
     default:
-    return state
+      return state
   }
 }
 
@@ -18,28 +18,28 @@ function tags(state = {
 }, action) {
   switch (action.type) {
     case REQUEST_TAGS:
-    return Object.assign({}, state, {
-      isFetching: true
-    })
+      return Object.assign({}, state, {
+        isFetching: true
+      })
     case RECEIVE_TAGS:
-    return Object.assign({}, state, {
-      isFetching: false,
-      items: action.items,
-      lastUpdated: action.receivedAt
-    })
+      return Object.assign({}, state, {
+        isFetching: false,
+        items: action.items,
+        lastUpdated: action.receivedAt
+      })
     case SEND_TAG_SUCCESS:
-    var tags = state.items
-    for (var i = 0; i < tags.length; i++) {
-      var tag = tags[i]
-      if (tag.name === action.tag) {
-        tag.value = action.value
+      var tags = state.items
+      for (var i = 0; i < tags.length; i++) {
+        var tag = tags[i]
+        if (tag.name === action.tag) {
+          tag.value = action.value
+        }
       }
-    }
-    return Object.assign({}, state, {
-      isFetching: false,
-      items: tags,
-      lastUpdated: action.receivedAt
-    })
+      return Object.assign({}, state, {
+        isFetching: false,
+        items: tags,
+        lastUpdated: action.receivedAt
+      })
     case RECEIVE_EVENT:
       for (var j in action.payload) {
         if (action.payload.hasOwnProperty(j)) {
@@ -71,29 +71,29 @@ function tagsByHandler(state = {}, action) {
   switch (action.type) {
     case REQUEST_TAGS:
     case RECEIVE_TAGS:
-    return Object.assign({}, state, {
-      [action.handler]: tags(state[action.handler], action)
-    })
-    case SEND_TAG_SUCCESS:
-    return Object.assign({}, state, {
-      [action.handler]: tags(state[action.handler], action)
-    })
-    case RECEIVE_EVENT:
-    var handler
-    for (var i in action.payload) {
-      if (action.payload.hasOwnProperty(i)) {
-        handler = action.payload[i].handler
-      }
-    }
-    if (handler) {
       return Object.assign({}, state, {
-        [handler]: tags(state[handler], action)
+        [action.handler]: tags(state[action.handler], action)
       })
-    } else {
-      return state
-    }
+    case SEND_TAG_SUCCESS:
+      return Object.assign({}, state, {
+        [action.handler]: tags(state[action.handler], action)
+      })
+    case RECEIVE_EVENT:
+      var handler
+      for (var i in action.payload) {
+        if (action.payload.hasOwnProperty(i)) {
+          handler = action.payload[i].handler
+        }
+      }
+      if (handler) {
+        return Object.assign({}, state, {
+          [handler]: tags(state[handler], action)
+        })
+      } else {
+        return state
+      }
     default:
-    return state
+      return state
   }
 }
 
@@ -102,33 +102,33 @@ function handlers(state = {isFetching: false, items: []}, action) {
   console.log('Action is', action)
   switch (action.type) {
     case REQUEST_HANDLERS:
-    return Object.assign({}, state, {
-      isFetching: true
-    })
+      return Object.assign({}, state, {
+        isFetching: true
+      })
     case RECEIVE_HANDLERS:
-    return Object.assign({}, state, {
-      isFetching: false,
-      items: action.items,
-      lastUpdated: action.receivedAt
-    })
+      return Object.assign({}, state, {
+        isFetching: false,
+        items: action.items,
+        lastUpdated: action.receivedAt
+      })
     default:
-    return state
+      return state
   }
 }
 
 function events(state = {isFetching: false, data: []}, action) {
   switch (action.type) {
     case REQUEST_EVENTS:
-    return Object.assign({}, state, {
-      isFetching: true
-    })
+      return Object.assign({}, state, {
+        isFetching: true
+      })
     case RECEIVE_EVENT:
-    return Object.assign({}, state, {
-      isFetching: false,
-      data: [...state.data, action.payload]
-    })
+      return Object.assign({}, state, {
+        isFetching: false,
+        data: [...state.data, action.payload]
+      })
     default:
-    return state
+      return state
   }
 }
 

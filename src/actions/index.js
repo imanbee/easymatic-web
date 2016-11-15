@@ -14,6 +14,13 @@ export const SERVICE_BASE_URL = 'http://localhost:32768/'
 export const REQUEST_EVENTS = 'REQUEST_EVENTS'
 export const RECEIVE_EVENT = 'RECEIVE_EVENT'
 
+export function selectHandler(handler) {
+  return {
+    type: SELECT_HANDLER,
+    handler: handler
+  }
+}
+
 function requestEvents() {
   return {
     type: REQUEST_EVENTS
@@ -103,8 +110,8 @@ export function startFetchEvents() {
   return dispatch => {
     dispatch(requestEvents())
     return fetch(SERVICE_BASE_URL + 'api/events?wait=true')
-    .then(response => response.json())
-    .then(json => dispatch(receiveEvent(json)))
+      .then(response => response.json())
+      .then(json => dispatch(receiveEvent(json)))
   }
 }
 
@@ -112,8 +119,8 @@ export function fetchHandlers() {
   return dispatch => {
     dispatch(requestHandlers())
     return fetch(SERVICE_BASE_URL + 'api/handlers/')
-    .then(response => response.json())
-    .then(json => dispatch(receiveHandlers(json)))
+      .then(response => response.json())
+      .then(json => dispatch(receiveHandlers(json)))
   }
 }
 
@@ -121,8 +128,8 @@ function fetchTags(handler) {
   return dispatch => {
     dispatch(requestTags(handler))
     return fetch(SERVICE_BASE_URL + `api/handlers/${handler}/tags/`)
-    .then(response => response.json())
-    .then(json => dispatch(receiveTags(handler, json)))
+      .then(response => response.json())
+      .then(json => dispatch(receiveTags(handler, json)))
   }
 }
 
@@ -173,13 +180,13 @@ export function updateTag(handler, tag, value) {
 .catch(function(error) {
 dispatch(sendTagFailure(handler, tag, value, error))
 })*/
-return fetch(SERVICE_BASE_URL + `api/handlers/${handler}/tags/${tag}/?value=${value}`, {
-  method: 'POST'
-}).then(checkStatus)
-.then(response => response.json())
-.then(json => dispatch(sendTagSuccess(handler, tag, value)))
-.catch(function(error) {
-  dispatch(sendTagFailure(handler, tag, value, error))
-})
-}
+    return fetch(SERVICE_BASE_URL + `api/handlers/${handler}/tags/${tag}/?value=${value}`, {
+      method: 'POST'
+    }).then(checkStatus)
+      .then(response => response.json())
+      .then(json => dispatch(sendTagSuccess(handler, tag, value)))
+      .catch(function(error) {
+        dispatch(sendTagFailure(handler, tag, value, error))
+      })
+  }
 }

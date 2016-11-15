@@ -1,11 +1,15 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
-import { fetchTagsIfNeeded } from '../actions'
+import { fetchTagsIfNeeded, selectHandler } from '../actions'
 
 class Handler extends Component {
   componentDidMount() {
     this.props.dispatch(fetchTagsIfNeeded(this.props.handler))
     console.log('Handler componentDidMount with props', this.props);
+  }
+
+  onSelect(handlerName) {
+    this.props.dispatch(selectHandler(handlerName));
   }
 
   componentWillReceiveProps(nextProps) {
@@ -15,12 +19,7 @@ class Handler extends Component {
   }
 
   render() {
-    var handlerStyle = {
-      display: 'inline-block',
-      padding: '5px',
-      marginBottom: '5px'
-    }
-    return ( <div style={handlerStyle}><b>{this.props.handler}</b></div> )
+    return ( <div onClick={this.onSelect.bind(this, this.props.handler)}>{this.props.handler}</div> )
   }
 }
 
