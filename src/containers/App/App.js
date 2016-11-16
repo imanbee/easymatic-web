@@ -1,9 +1,12 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { Grid, Row, Col } from 'react-flexbox-grid/lib/index'
 import { fetchHandlers } from '../../actions'
 import HandlersList from '../../components/HandlersList'
+import TagsList from '../../components/TagsList'
 import EventsMonitor from '../../containers/EventsMonitor'
 import './App.css'
+import { grey300 } from 'material-ui/styles/colors'
 
 
 class App extends Component {
@@ -29,35 +32,40 @@ class App extends Component {
   }
 
   render() {
-    const { handlers, isFetching, events } = this.props
-    var titleStyle = {
-      color: '#ffffff'
+    const { handlers, selectedHandler, isFetching, events } = this.props
+    console.log('Selected handler is ', selectedHandler)
+    var handlersTagsContainerStyle = {
+      height: '60vh',
+      borderBottom: '1px solid',
+      borderColor: grey300
     }
-    var style = {
-      position: 'relative',
-      height: '100vh'
-    }
-    var handlersListStyle = {
-      opacity: isFetching ? 0.5 : 1,
-      height: '50vh',
-      overflow: 'scroll'
+    var monitorContainerStyle = {
+      height: '30vh'
     }
     return (
-      <div style={style}>
-      <h1 style={titleStyle}>Smart House<small>  handlers and tags</small></h1>
-      {isFetching && handlers.length === 0 &&
-        <h2>Loading...</h2>
-      }
-      {!isFetching && handlers.length === 0 &&
-        <h2>Empty.</h2>
-      }
-      {handlers.length > 0 &&
-        <div style={handlersListStyle}>
-        <HandlersList handlers={handlers} />
-        </div>
-      }
-      <EventsMonitor events={events}/>
-      </div>
+      <Grid>
+        {isFetching && handlers.length === 0 &&
+            <h2>Loading...</h2>
+        }
+        {!isFetching && handlers.length === 0 &&
+            <h2>Empty.</h2>
+        }
+        {handlers.length > 0 &&
+            <Row top="xs" style={handlersTagsContainerStyle}>
+              <Col xs={3} md={3} style={{height: '100%', overflowY: 'scroll'}}>
+                <HandlersList handlers={handlers} selectedHandler={selectedHandler}/>
+              </Col>
+              <Col xs={9} md={9} style={{height: '100%', overflowY: 'scroll'}}>
+                {selectedHandler && selectedHandler.tags && selectedHandler.tags.items && selectedHandler.tags.items.length > 0 &&
+                    <TagsList tags={selectedHandler.tags.items} handler={selectedHandler} />
+                }
+              </Col>
+            </Row>
+        }
+        <Row style={monitorContainerStyle}>
+          <EventsMonitor events={events}/>
+        </Row>
+      </Grid>
     )
   }
 }
@@ -71,6 +79,7 @@ App.propTypes = {
 
 function mapStateToProps(state) {
   console.log('Map state to props', state)
+  let selectedHandlerName = state.selectedHandler;
   var tags = state.tagsByHandler
   console.log(state.handlers.items)
   var handlersOriginal = state.handlers.items
@@ -82,12 +91,22 @@ function mapStateToProps(state) {
     handler['name'] = handlersOriginal[i];
     handler['tags'] = tags[handlersOriginal[i]] || []
     handlers.push(handler)
+    if (handlersOriginal[i] === selectedHandlerName) {
+      selectedHandler = handlersOriginal[i]
+    }
+  }
+  let selectedHandler = handlers[0]
+  for (var j = 0; j < handlers.length; j++) {
+    if (handlers[j].name === selectedHandlerName) {
+      selectedHandler = handlers[j]
+    }
   }
   console.log('All handlers ', handlers)
   var events = state.events
   console.log('events are', events)
   return {
     handlers,
+    selectedHandler,
     tags,
     isFetching,
     lastUpdated,

@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import Switch from 'react-bootstrap-switch'
+import Toggle from 'material-ui/Toggle';
+import { ListItem } from 'material-ui/List';
 import { updateTag } from '../actions'
+import { grey500 } from 'material-ui/styles/colors';
 
 class Tag extends Component {
 
-  onSwitchChange(tag, handler, state) {
-    console.log('Switch changed with state', tag, handler, state)
-    var st = (state ? '1' : '0')
+  onToggle(tag, handler) {
+    console.log('Switch changed with state', tag, handler)
+    var st = (tag.value === '1' ? '0' : '1')
     this.props.dispatch(updateTag(handler.name, tag.name, st))
   }
 
@@ -15,20 +17,26 @@ class Tag extends Component {
     var tag = this.props.tag
     var handler = this.props.handler
     return (
-      <li style={{padding: '8px', listStyleType: 'none'}}>
-      <span style={{marginRight: '10px'}}>{tag.name}</span>
-
-      {(tag.value === '0' || tag.value === '1') &&
-      <Switch size="mini" onChange={this.onSwitchChange.bind(this, tag, handler)} state={tag.value === '1'} handleWidth="auto"/>
-    }
-
-    {tag.value !== '0' && tag.value !== '1' &&
-    <span>{tag.value}</span>
+      <div>
+        {tag.value === '1' || tag.value === '0' ?
+            <ListItem primaryText={tag.name} rightToggle={
+              <Toggle
+                toggled={tag.value === '1'}
+                onToggle={this.onToggle.bind(this, tag, handler)}
+              />
+            }>
+          </ListItem>
+            :
+            <ListItem primaryText={tag.name}>
+              <span style={{
+                float: 'right',
+                color: grey500 
+              }}>{tag.value}</span>
+            </ListItem>
+        }
+      </div>
+    )
   }
-
-  </li>
-)
-}
 }
 
 export default connect()(Tag);

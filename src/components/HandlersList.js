@@ -1,37 +1,29 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 import Handler from '../components/Handler'
-import TagsList from '../components/TagsList'
+import {List, ListItem } from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
+import Divider from 'material-ui/Divider';
+import { green100 } from 'material-ui/styles/colors';
 
 class HandlersList extends Component {
-  updateSpinnerClass(tags) {
-    var spinnerClass = 'fa fa-small fa-refresh'+(tags.isFetching ? ' fa-spin' : '')
-    return spinnerClass
-  }
-
   render() {
-    var listStyle = {
-      listStyleType: 'none',
-      paddingLeft: '0px',
-      width: '50%'
+    let selectedHandler = this.props.selectedHandler;
+    let activeStyle = {
+      backgroundColor: green100
     }
-    var handlerStyle = {
-      backgroundColor: '#43A047',
-      color: '#FFFFFF'
-    }
-
     return (
-      <ul style={listStyle}>
-      {this.props.handlers.map((handler, i) =>
-
-        <li style={handlerStyle} key={i}>
-        <Handler handler={handler.name} />
-        {handler && handler.tags && handler.tags.items && handler.tags.items.length > 0 &&
-          <TagsList tags={handler.tags.items} handler={handler} />
-        }
-        </li>
-      )}
-      </ul>
+      <List style={{
+        borderRight: '1px solid rgb(224, 224, 224)',
+        height: '100%'
+      }}>
+        <Subheader>Handlers</Subheader>
+        {this.props.handlers.map((handler, i) =>
+          <ListItem value={i} data-name={handler.name} data-selected={selectedHandler.name} style={(handler.name === selectedHandler.name) ? activeStyle : {}}>
+            <Handler handler={handler.name} />
+          </ListItem>
+        )}
+      </List>
     )
   }
 }
