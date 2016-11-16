@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { startFetchEvents } from '../actions'
-import Event from '../components/Event'
+import { green300 } from 'material-ui/styles/colors'
+import {List, ListItem} from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
+import { Grid, Row, Col } from 'react-flexbox-grid/lib/index'
 
 class EventsMonitor extends Component {
   constructor(props) {
@@ -53,7 +56,7 @@ class EventsMonitor extends Component {
       right: 0,
       bottom: 0,
       height: '30vh',
-      backgroundColor: '#97c787',
+      backgroundColor: green300,
       overflow: 'scroll',
       opacity: '0.5'
     }
@@ -61,9 +64,20 @@ class EventsMonitor extends Component {
     processedData.reverse()
     return (
       <div className="events-monitor" style={monitorStyle}>
-      {processedData.map((event, i) =>
-        <Event key={event.id} event={event}/>
-      )}
+        <Grid>
+        <Row>
+          <Col md={3}>
+            <List>
+              <Subheader>Events</Subheader>
+              {processedData.map((event, i) =>
+                <ListItem primaryText={event.event.tag} secondaryText={event.event.handler}>
+                  <span style={{float: 'right'}}>{event.event.value}</span>
+                </ListItem>
+              )}
+            </List>
+          </Col>
+        </Row>
+      </Grid>
       </div>
     )
   }

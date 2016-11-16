@@ -19,7 +19,11 @@ class Handler extends Component {
   }
 
   render() {
-    return ( <div onClick={this.onSelect.bind(this, this.props.handler)}>{this.props.handler}</div> )
+    return (
+      <div onClick={this.onSelect.bind(this, this.props.handler)}>
+      {this.props.handler}
+    </div>
+    )
   }
 }
 

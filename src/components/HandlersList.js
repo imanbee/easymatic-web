@@ -1,57 +1,29 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 import Handler from '../components/Handler'
-import {List, ListItem, makeSelectable} from 'material-ui/List';
+import {List, ListItem } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
-
-let SelectableList = makeSelectable(List);
-
-function wrapState(ComposedComponent) {
-  return class SelectableList extends Component {
-    static propTypes = {
-      children: PropTypes.node.isRequired,
-      defaultValue: PropTypes.number.isRequired,
-    };
-
-    componentWillMount() {
-      this.setState({
-        selectedIndex: this.props.defaultValue,
-      });
-    }
-
-    handleRequestChange = (event, index) => {
-      this.setState({
-        selectedIndex: index,
-      });
-    };
-
-    render() {
-      return (
-        <ComposedComponent
-          value={this.state.selectedIndex}
-          onChange={this.handleRequestChange}
-        >
-          {this.props.children}
-        </ComposedComponent>
-      );
-    }
-  };
-}
-
-SelectableList = wrapState(SelectableList);
-
+import Divider from 'material-ui/Divider';
+import { green100 } from 'material-ui/styles/colors';
 
 class HandlersList extends Component {
   render() {
+    let selectedHandler = this.props.selectedHandler;
+    let activeStyle = {
+      backgroundColor: green100
+    }
     return (
-      <SelectableList defaultValue={0}>
+      <List style={{
+        borderRight: '1px solid rgb(224, 224, 224)',
+        height: '100%'
+      }}>
         <Subheader>Handlers</Subheader>
         {this.props.handlers.map((handler, i) =>
-          <ListItem key={i} value={i}>
+          <ListItem value={i} data-name={handler.name} data-selected={selectedHandler.name} style={(handler.name === selectedHandler.name) ? activeStyle : {}}>
             <Handler handler={handler.name} />
           </ListItem>
         )}
-      </SelectableList>
+      </List>
     )
   }
 }

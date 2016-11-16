@@ -6,6 +6,7 @@ import HandlersList from '../../components/HandlersList'
 import TagsList from '../../components/TagsList'
 import EventsMonitor from '../../containers/EventsMonitor'
 import './App.css'
+import { grey300 } from 'material-ui/styles/colors'
 
 
 class App extends Component {
@@ -34,7 +35,12 @@ class App extends Component {
     const { handlers, selectedHandler, isFetching, events } = this.props
     console.log('Selected handler is ', selectedHandler)
     var handlersTagsContainerStyle = {
-      height: '60vh'
+      height: '60vh',
+      borderBottom: '1px solid',
+      borderColor: grey300
+    }
+    var monitorContainerStyle = {
+      height: '30vh'
     }
     return (
       <Grid>
@@ -46,17 +52,17 @@ class App extends Component {
         }
         {handlers.length > 0 &&
             <Row top="xs" style={handlersTagsContainerStyle}>
-              <Col xs={3} md={3} style={{maxHeight: '100%', overflowY: 'scroll'}}>
-                <HandlersList handlers={handlers} />
+              <Col xs={3} md={3} style={{height: '100%', overflowY: 'scroll'}}>
+                <HandlersList handlers={handlers} selectedHandler={selectedHandler}/>
               </Col>
-              <Col xsOffset={1} xs={8} mdOffset={1} md={8} style={{maxHeight: '100%', overflowY: 'scroll'}}>
+              <Col xs={9} md={9} style={{height: '100%', overflowY: 'scroll'}}>
                 {selectedHandler && selectedHandler.tags && selectedHandler.tags.items && selectedHandler.tags.items.length > 0 &&
                     <TagsList tags={selectedHandler.tags.items} handler={selectedHandler} />
                 }
               </Col>
             </Row>
         }
-        <Row>
+        <Row style={monitorContainerStyle}>
           <EventsMonitor events={events}/>
         </Row>
       </Grid>

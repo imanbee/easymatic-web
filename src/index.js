@@ -21,7 +21,7 @@ import './app.css'
 
 const store = configureStore()
 
-const muiTheme = getMuiTheme({
+export const muiTheme = getMuiTheme({
   palette: {
     primary1Color: green500,
     primary2Color: green700,
@@ -44,7 +44,11 @@ ReactDOM.render(
   <Provider store={store}>
     <MuiThemeProvider muiTheme={muiTheme}>
       <div>
-      <AppBar title="easymatic"/>
+        <AppBar title="easymatic" titleStyle={{
+              textTransform: 'uppercase',
+              letterSpacing: '0.4em',
+              fontWeight: '900'
+        }}/>
       <App />
     </div>
     </MuiThemeProvider>

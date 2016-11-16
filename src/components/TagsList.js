@@ -3,6 +3,13 @@ import { connect } from 'react-redux'
 import { List } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Tag from '../components/Tag'
+import {
+  green500, green700,
+  orangeA200,
+  cyan500,
+  grey100, grey300, grey400, grey500,
+  white, darkBlack, fullBlack,
+} from 'material-ui/styles/colors';
 
 class TagsList extends Component {
   render() {
@@ -11,11 +18,17 @@ class TagsList extends Component {
     console.log('Tags is ', this.props.handler, this.props.tags)
     return (
       <List>
-        <Subheader>Tags</Subheader>
-        {tags.map((tag, i) =>
-          <Tag key={i} tag={tag} handler={handler}/>
-        )}
-      </List>
+        <Subheader>Tags for 
+          <span style={{
+            color: green500
+          }}>
+          &nbsp;{this.props.handler.name}
+        </span>
+      </Subheader>
+      {tags.map((tag, i) =>
+        <Tag key={i} tag={tag} handler={handler}/>
+      )}
+    </List>
     )
   }
 }
