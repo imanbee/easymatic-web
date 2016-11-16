@@ -33,14 +33,13 @@ class App extends Component {
 
   render() {
     const { handlers, selectedHandler, isFetching, events } = this.props
-    console.log('Selected handler is ', selectedHandler)
     var handlersTagsContainerStyle = {
-      height: '60vh',
+      height: '90vh',
       borderBottom: '1px solid',
       borderColor: grey300
     }
     var monitorContainerStyle = {
-      height: '30vh'
+      height: '90vh'
     }
     return (
       <Grid>
@@ -55,16 +54,16 @@ class App extends Component {
               <Col xs={3} md={3} style={{height: '100%', overflowY: 'scroll'}}>
                 <HandlersList handlers={handlers} selectedHandler={selectedHandler}/>
               </Col>
-              <Col xs={9} md={9} style={{height: '100%', overflowY: 'scroll'}}>
+              <Col xs={6} md={6} style={{height: '100%', overflowY: 'scroll'}}>
                 {selectedHandler && selectedHandler.tags && selectedHandler.tags.items && selectedHandler.tags.items.length > 0 &&
                     <TagsList tags={selectedHandler.tags.items} handler={selectedHandler} />
                 }
               </Col>
+              <Col xs={3} md={3} style={{height: '100%', overflowY: 'scroll'}}>
+                <EventsMonitor events={events}/>
+              </Col>
             </Row>
         }
-        <Row style={monitorContainerStyle}>
-          <EventsMonitor events={events}/>
-        </Row>
       </Grid>
     )
   }
@@ -78,10 +77,8 @@ App.propTypes = {
 }
 
 function mapStateToProps(state) {
-  console.log('Map state to props', state)
   let selectedHandlerName = state.selectedHandler;
   var tags = state.tagsByHandler
-  console.log(state.handlers.items)
   var handlersOriginal = state.handlers.items
   var isFetching = state.handlers.isFetching
   var lastUpdated = state.handlers.lastUpdated || Date.now()
@@ -101,9 +98,7 @@ function mapStateToProps(state) {
       selectedHandler = handlers[j]
     }
   }
-  console.log('All handlers ', handlers)
   var events = state.events
-  console.log('events are', events)
   return {
     handlers,
     selectedHandler,

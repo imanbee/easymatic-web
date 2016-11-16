@@ -9,7 +9,7 @@ export const SEND_TAG = 'SEND_TAG'
 export const SEND_TAG_SUCCESS = 'SEND_TAG_SUCCESS'
 export const SEND_TAG_FAILURE = 'SEND_TAG_FAILURE'
 
-export const SERVICE_BASE_URL = 'http://localhost:32768/'
+export const SERVICE_BASE_URL = 'http://localhost:32773/'
 
 export const REQUEST_EVENTS = 'REQUEST_EVENTS'
 export const RECEIVE_EVENT = 'RECEIVE_EVENT'
@@ -106,10 +106,10 @@ function sendTagFailure(handler, tag, value, error) {
   }
 }
 
-export function startFetchEvents() {
+export function startFetchEvents(lastEventId) {
   return dispatch => {
     dispatch(requestEvents())
-    return fetch(SERVICE_BASE_URL + 'api/events?wait=true')
+    return fetch(SERVICE_BASE_URL + 'api/events?wait=true' + (lastEventId ? ('&index=' + lastEventId) : ''))
       .then(response => response.json())
       .then(json => dispatch(receiveEvent(json)))
   }
@@ -165,23 +165,11 @@ function checkStatus(response) {
 export function updateTag(handler, tag, value) {
   return dispatch => {
     dispatch(sendTag(handler, tag, value))
-    /*return fetch(SERVICE_BASE_URL + `api/handlers/${handler}/tags/${tag}/`, {
-    method: 'POST',
-    headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-  value: value
-})
-}).then(checkStatus)
-.then(response => response.json())
-.then(json => dispatch(sendTagSuccess(handler, tag, value)))
-.catch(function(error) {
-dispatch(sendTagFailure(handler, tag, value, error))
-})*/
-    return fetch(SERVICE_BASE_URL + `api/handlers/${handler}/tags/${tag}/?value=${value}`, {
-      method: 'POST'
+    let data = new FormData();
+    data.append( "value", value );
+    return fetch(SERVICE_BASE_URL + `api/handlers/${handler}/tags/${tag}/`, {
+      method: 'POST',
+      body: data
     }).then(checkStatus)
       .then(response => response.json())
       .then(json => dispatch(sendTagSuccess(handler, tag, value)))

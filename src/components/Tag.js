@@ -8,8 +8,8 @@ import { grey500 } from 'material-ui/styles/colors';
 class Tag extends Component {
 
   onToggle(tag, handler) {
-    console.log('Switch changed with state', tag, handler)
-    var st = (tag.value === '1' ? '0' : '1')
+    var st = (tag.value == 1 ? 0 : 1)
+    console.log('Switch changed with state', tag, handler, st)
     this.props.dispatch(updateTag(handler.name, tag.name, st))
   }
 
@@ -18,10 +18,10 @@ class Tag extends Component {
     var handler = this.props.handler
     return (
       <div>
-        {tag.value === '1' || tag.value === '0' ?
+        {tag.value == 1 || tag.value == 0 ?
             <ListItem primaryText={tag.name} rightToggle={
               <Toggle
-                toggled={tag.value === '1'}
+                toggled={tag.value == 1}
                 onToggle={this.onToggle.bind(this, tag, handler)}
               />
             }>
