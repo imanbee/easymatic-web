@@ -19,7 +19,7 @@ class HandlersList extends Component {
       }}>
         <Subheader>Handlers</Subheader>
         {this.props.handlers.map((handler, i) =>
-          <ListItem value={i} data-name={handler.name} data-selected={selectedHandler.name} style={(handler.name === selectedHandler.name) ? activeStyle : {}}>
+          <ListItem key={i} value={i} data-name={handler.name} data-selected={selectedHandler.name} style={(handler.name === selectedHandler.name) ? activeStyle : {}}>
             <Handler handler={handler.name} />
           </ListItem>
         )}

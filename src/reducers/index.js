@@ -41,27 +41,24 @@ function tags(state = {
         lastUpdated: action.receivedAt
       })
     case RECEIVE_EVENT:
-      for (var j in action.payload) {
-        if (action.payload.hasOwnProperty(j)) {
-          var event = action.payload[j]
-          var tagName = event.tag
-          var tagValue = event.value
-          console.log('test:', tagName, tagValue)
-          let tagsItems = state.items
-          for (let k = 0; k < tagsItems.length; k++) {
-            var tagItem = tagsItems[k]
-            if (tagItem.name === tagName) {
-              tagItem.value = tagValue;
-            }
+      let events = extractEvents(action.payload)
+      let stateTags = state.items
+      for (let i in events) {
+        let event = events[i];
+        let eventTagName = event.tag
+        let eventTagValue = event.value
+        for (let j in stateTags) {
+          var tag = stateTags[j]
+          if (tag.name === eventTagName) {
+            tag.value = eventTagValue
           }
-          return Object.assign({}, state, {
-            isFetching: false,
-            items: tagsItems,
-            lastUpdated: action.receivedAt
-          })
         }
       }
-      break
+      return Object.assign({}, state, {
+        isFetching: false,
+        items: stateTags,
+        lastUpdated: action.receivedAt
+      })
     default:
       return state
   }
@@ -79,16 +76,22 @@ function tagsByHandler(state = {}, action) {
         [action.handler]: tags(state[action.handler], action)
       })
     case RECEIVE_EVENT:
-      var handler
-      for (var i in action.payload) {
-        if (action.payload.hasOwnProperty(i)) {
-          handler = action.payload[i].handler
-        }
+      let events = extractEvents(action.payload)
+      let affectedHandlers = []
+      for (let i in events) {
+        affectedHandlers.push(events[i].handler)
       }
-      if (handler) {
-        return Object.assign({}, state, {
-          [handler]: tags(state[handler], action)
-        })
+      affectedHandlers= affectedHandlers.filter(function(item, pos) {
+        return affectedHandlers.indexOf(item) == pos;
+      })
+      if (affectedHandlers.length > 0) {
+        let newState = {};
+        for (let j in affectedHandlers) {
+          let handler = affectedHandlers[j]
+          let newTags = tags(state[handler], action)
+          newState[handler] = newTags
+        }
+        return Object.assign({}, state, newState)
       } else {
         return state
       }
@@ -116,6 +119,38 @@ function handlers(state = {isFetching: false, items: []}, action) {
   }
 }
 
+function extractEvents(payload) {
+  let isArray = Object.prototype.toString.call(payload) === '[object Array]';
+  let events = [];
+  if (!isArray) {
+    for (var j in payload) {
+      if (payload.hasOwnProperty(j)) {
+        let event = {
+          ...payload[j],
+          id: j
+        }
+        events.push(event)
+      }
+    }
+  } else {
+    for (let i in payload) {
+      if (payload.hasOwnProperty(i)) {
+        let ev = payload[i];
+        for (let j in ev) {
+          if (ev.hasOwnProperty(j)) {
+            let event = {
+              ...ev[j],
+              id: j
+            }
+            events.push(event)
+          }
+        }
+      }
+    }
+  }
+  return events;
+}
+
 function events(state = {isFetching: false, data: []}, action) {
   switch (action.type) {
     case REQUEST_EVENTS:
@@ -123,9 +158,10 @@ function events(state = {isFetching: false, data: []}, action) {
         isFetching: true
       })
     case RECEIVE_EVENT:
+      let events = extractEvents(action.payload)
       return Object.assign({}, state, {
         isFetching: false,
-        data: [...state.data, action.payload]
+        data: [...state.data, ...events]
       })
     default:
       return state
