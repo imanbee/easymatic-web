@@ -9,7 +9,7 @@ export const SEND_TAG = 'SEND_TAG'
 export const SEND_TAG_SUCCESS = 'SEND_TAG_SUCCESS'
 export const SEND_TAG_FAILURE = 'SEND_TAG_FAILURE'
 
-export const SERVICE_BASE_URL = 'http://localhost:32773/'
+export const SERVICE_BASE_URL = 'http://localhost:32774/'
 
 export const REQUEST_EVENTS = 'REQUEST_EVENTS'
 export const RECEIVE_EVENT = 'RECEIVE_EVENT'

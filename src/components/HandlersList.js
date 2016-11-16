@@ -3,10 +3,15 @@ import { connect } from 'react-redux'
 import Handler from '../components/Handler'
 import {List, ListItem } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
-import Divider from 'material-ui/Divider';
 import { green100 } from 'material-ui/styles/colors';
+import { selectHandler } from '../actions'
 
 class HandlersList extends Component {
+  
+  onSelect(handlerName) {
+    this.props.dispatch(selectHandler(handlerName));
+  }
+
   render() {
     let selectedHandler = this.props.selectedHandler;
     let activeStyle = {
@@ -19,7 +24,11 @@ class HandlersList extends Component {
       }}>
         <Subheader>Handlers</Subheader>
         {this.props.handlers.map((handler, i) =>
-          <ListItem key={i} value={i} data-name={handler.name} data-selected={selectedHandler.name} style={(handler.name === selectedHandler.name) ? activeStyle : {}}>
+          <ListItem 
+            key={i} 
+            value={i} 
+            onClick={this.onSelect.bind(this, handler.name)}
+            style={(handler.name === selectedHandler.name) ? activeStyle : {}}>
             <Handler handler={handler.name} />
           </ListItem>
         )}

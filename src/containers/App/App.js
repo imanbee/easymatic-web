@@ -38,9 +38,6 @@ class App extends Component {
       borderBottom: '1px solid',
       borderColor: grey300
     }
-    var monitorContainerStyle = {
-      height: '90vh'
-    }
     return (
       <Grid>
         {isFetching && handlers.length === 0 &&
@@ -88,9 +85,6 @@ function mapStateToProps(state) {
     handler['name'] = handlersOriginal[i];
     handler['tags'] = tags[handlersOriginal[i]] || []
     handlers.push(handler)
-    if (handlersOriginal[i] === selectedHandlerName) {
-      selectedHandler = handlersOriginal[i]
-    }
   }
   let selectedHandler = handlers[0]
   for (var j = 0; j < handlers.length; j++) {
